@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
+    [SerializeField] private GameObject gamePlane;
     [SerializeField] private Node[,] grid;
     [SerializeField] private Vector2 gridWorldSize;
     [SerializeField] private float nodeRadius;
@@ -15,8 +16,11 @@ public class Grid : MonoBehaviour
     [SerializeField] private LayerMask unWalkableLayer;
     void Start()
     {
+        //convert ground plane scale into width and length
+        //uses 10 as unity uses 1 unit and the plane with scale 1 has 10 by 10 units
+        gridWorldSize = new Vector2(gamePlane.transform.localScale.x * 10, gamePlane.transform.localScale.z * 10);
         nodeDiameter = nodeRadius * 2;
-        // calculates number of nodes for the grid
+        // calculates number of nodes for the grid x and y
         gridNodeSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridNodeSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
         createGrid();
@@ -24,6 +28,7 @@ public class Grid : MonoBehaviour
 
     private void createGrid()
     {
+        //fills grid with node starting from bottom left of the plane
         grid = new Node[gridNodeSizeX,gridNodeSizeY];
         Vector3 bottomLeft = transform.position - (Vector3.right * gridNodeSizeX / 2) - (Vector3.forward * gridNodeSizeY / 2);
 
@@ -31,7 +36,9 @@ public class Grid : MonoBehaviour
         {
             for(int y = 0; y < gridNodeSizeY; y++)
             {
+                //x and y tells us how many nodes are already created. we multiply by the diameter and add radius to it to get the next node location
                 Vector3 nodePosition = bottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
+                //uses a invisible sphere with nodeRadius on node position to check if node collides with any obstacles
                 bool walkable = !(Physics.CheckSphere(nodePosition, nodeRadius, unWalkableLayer));
                 grid[x, y] = new Node(walkable, nodePosition);
             }
