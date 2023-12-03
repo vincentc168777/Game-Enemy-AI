@@ -20,7 +20,7 @@ public class Grid : MonoBehaviour
         //uses 10 as unity uses 1 unit and the plane with scale 1 has 10 by 10 units
         gridWorldSize = new Vector2(gamePlane.transform.localScale.x * 10, gamePlane.transform.localScale.z * 10);
         nodeDiameter = nodeRadius * 2;
-        // calculates number of nodes for the grid x and y
+        // calculates number of nodes for the grid's x and y axis
         gridNodeSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridNodeSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
         createGrid();
@@ -46,6 +46,7 @@ public class Grid : MonoBehaviour
 
     }
 
+    //drawing the nodes for visualization
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridNodeSizeX, 1, gridNodeSizeY));
