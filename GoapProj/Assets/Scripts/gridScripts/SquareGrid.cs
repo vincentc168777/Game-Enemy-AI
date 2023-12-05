@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    [SerializeField] private GameObject gamePlane;
+    [SerializeField] private GameObject groundPlane;
     [SerializeField] private Node[,] grid;
     [SerializeField] private Vector2 gridWorldSize;
     [SerializeField] private float nodeRadius;
@@ -18,7 +18,7 @@ public class Grid : MonoBehaviour
     {
         //convert ground plane scale into width and length
         //uses 10 as unity uses 1 unit and the plane with scale 1 has 10 by 10 units
-        gridWorldSize = new Vector2(gamePlane.transform.localScale.x * 10, gamePlane.transform.localScale.z * 10);
+        gridWorldSize = new Vector2(groundPlane.transform.localScale.x * 10, groundPlane.transform.localScale.z * 10);
         nodeDiameter = nodeRadius * 2;
         // calculates number of nodes for the grid's x and y axis
         gridNodeSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
