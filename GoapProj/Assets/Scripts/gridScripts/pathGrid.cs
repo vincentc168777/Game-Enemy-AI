@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class pathGrid : MonoBehaviour
 {
+    [SerializeField] private Transform player;
     [SerializeField] private Node[,] grid;
 
     [SerializeField] private LayerMask unWalkableMask;
@@ -16,7 +17,7 @@ public class pathGrid : MonoBehaviour
 
     [SerializeField] private float nodeRadius;
     [SerializeField] private float nodeDiameter;
-    [SerializeField] private 
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +47,28 @@ public class pathGrid : MonoBehaviour
         }
     }
 
+    private Node worldPosToNode(Vector3 worldpos)
+    {
+        float xPercent = worldpos.x / gridNodeSizeX + .5f;
+        float yPercent = worldpos.z / gridNodeSizeY + .5f;
+
+        Mathf.Clamp01(xPercent);
+        Mathf.Clamp01(yPercent);
+
+        /*we clamp the result of gridNodeSizeX * xPercent & gridNodeSizeY * yPercent to their gridNodeSize - 1, as the array with
+          the nodes go from 0 -> girdNodeSize - 1, so if player goes beyond, the x an y int will still be gridNodeSize - 1
+            
+          Not only that, if we place the player at the very edges, the percent calcluation will 
+          return gridNodeSize(results in out of bounds for array), not gridNodeSize - 1, 
+          which is why we clamp the result to gridNodeSize - 1 as well
+        */
+        
+        int x = Mathf.FloorToInt(Mathf.Clamp(gridNodeSizeX * xPercent, 0, gridNodeSizeX - 1));
+        int y = Mathf.FloorToInt(Mathf.Clamp(gridNodeSizeY * yPercent, 0, gridNodeSizeY - 1));
+
+        return grid[x, y];
+    }
+
     private void OnDrawGizmos()
     {
         
@@ -53,7 +76,14 @@ public class pathGrid : MonoBehaviour
         {
             foreach(Node n in grid)
             {
-                Gizmos.color = n.getWalkable() ? Color.white : Color.red;
+                if(worldPosToNode(player.position) == n)
+                {
+                    Gizmos.color = Color.cyan;
+                }
+                else
+                {
+                    Gizmos.color = n.getWalkable() ? Color.white : Color.red;
+                }
                 Gizmos.DrawCube(n.getNodePos(), Vector3.one * (nodeDiameter - .1f));
             }
         }
