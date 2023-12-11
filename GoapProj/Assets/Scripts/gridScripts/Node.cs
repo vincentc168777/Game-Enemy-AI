@@ -31,7 +31,7 @@ public class Node
         return walkable;
     }
 
-    public int getNodeXloc()
+    public int getNodeXLoc()
     {
         return nodeXLoc;
     }

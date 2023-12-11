@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ public class pathGrid : MonoBehaviour
 
     [SerializeField] private float nodeRadius;
     [SerializeField] private float nodeDiameter;
+
+    [SerializeField] private List<Node> generatedPath;
     
     // Start is called before the first frame update
     void Start()
@@ -29,6 +32,28 @@ public class pathGrid : MonoBehaviour
         gridNodeSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridNodeSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
         createGrid();
+    }
+
+    public Node worldPosToNode(Vector3 worldpos)
+    {
+        float xPercent = worldpos.x / gridNodeSizeX + .5f;
+        float yPercent = worldpos.z / gridNodeSizeY + .5f;
+
+        Mathf.Clamp01(xPercent);
+        Mathf.Clamp01(yPercent);
+
+        /*we clamp the result of gridNodeSizeX * xPercent & gridNodeSizeY * yPercent to their gridNodeSize - 1, as the array with
+          the nodes go from 0 -> girdNodeSize - 1, so if player goes beyond, the x an y int will still be gridNodeSize - 1
+            
+          Not only that, if we place the player at the very edges, the percent calcluation will 
+          return gridNodeSize(results in out of bounds for array), not gridNodeSize - 1, 
+          which is why we clamp the result to gridNodeSize - 1 as well
+        */
+
+        int x = Mathf.FloorToInt(Mathf.Clamp(gridNodeSizeX * xPercent, 0, gridNodeSizeX - 1));
+        int y = Mathf.FloorToInt(Mathf.Clamp(gridNodeSizeY * yPercent, 0, gridNodeSizeY - 1));
+
+        return grid[x, y];
     }
 
     public List<Node> getNeighbors(Node n)
@@ -54,24 +79,33 @@ public class pathGrid : MonoBehaviour
                  * since the diagonal nodes' x and y are -1 or 1, we can check if sum of their abs val == 2
                  * to identify it as the diagonal node to skip it
                  */
-                if((x == 0 && y == 0) || Mathf.Abs(x) + Math.Abs(y) == 2)
+                if ((x == 0 && y == 0) || Mathf.Abs(x) + Math.Abs(y) == 2)
                 {
                     continue;
                 }
 
-                int neighborX = n.getNodeXloc() + x;
+                int neighborX = n.getNodeXLoc() + x;
                 int neighborY = n.getNodeYLoc() + y;
                 // check if neighbor x & y are in grid array range
-                if ( (neighborX >= 0 && neighborX < gridNodeSizeX) && (neighborY >= 0 && neighborY < gridNodeSizeY))
+                if ((neighborX >= 0 && neighborX < gridNodeSizeX) && (neighborY >= 0 && neighborY < gridNodeSizeY))
                 {
                     neighbors.Add(grid[neighborX, neighborY]);
                 }
             }
-            return neighbors;
+   
         }
 
-
         return neighbors;
+    }
+
+    public int getCost(Node start, Node end)
+    {
+        return Mathf.Abs(start.getNodeXLoc() - end.getNodeXLoc()) + Mathf.Abs(start.getNodeYLoc() - end.getNodeYLoc());
+    }
+
+    public void setPath(List<Node> inputpathList)
+    {
+        generatedPath = inputpathList;
     }
 
     private void createGrid()
@@ -91,42 +125,26 @@ public class pathGrid : MonoBehaviour
         }
     }
 
-    private Node worldPosToNode(Vector3 worldpos)
-    {
-        float xPercent = worldpos.x / gridNodeSizeX + .5f;
-        float yPercent = worldpos.z / gridNodeSizeY + .5f;
-
-        Mathf.Clamp01(xPercent);
-        Mathf.Clamp01(yPercent);
-
-        /*we clamp the result of gridNodeSizeX * xPercent & gridNodeSizeY * yPercent to their gridNodeSize - 1, as the array with
-          the nodes go from 0 -> girdNodeSize - 1, so if player goes beyond, the x an y int will still be gridNodeSize - 1
-            
-          Not only that, if we place the player at the very edges, the percent calcluation will 
-          return gridNodeSize(results in out of bounds for array), not gridNodeSize - 1, 
-          which is why we clamp the result to gridNodeSize - 1 as well
-        */
-
-        int x = Mathf.FloorToInt(Mathf.Clamp(gridNodeSizeX * xPercent, 0, gridNodeSizeX - 1));
-        int y = Mathf.FloorToInt(Mathf.Clamp(gridNodeSizeY * yPercent, 0, gridNodeSizeY - 1));
-
-        return grid[x, y];
-    }
+    
 
     private void OnDrawGizmos()
     {
         if (grid != null)
         {
+
             foreach(Node n in grid)
             {
-                if(worldPosToNode(player.position) == n)
+                Gizmos.color = n.getWalkable() ? Color.white : Color.red;
+                if (generatedPath != null)
                 {
-                    Gizmos.color = Color.cyan;
+                    if (generatedPath.Contains(n))
+                    {
+                        Gizmos.color = Color.black;
+                    }
                 }
-                else
-                {
-                    Gizmos.color = n.getWalkable() ? Color.white : Color.red;
-                }
+                
+                
+                
                 Gizmos.DrawCube(n.getNodePos(), Vector3.one * (nodeDiameter - .1f));
             }
         }
