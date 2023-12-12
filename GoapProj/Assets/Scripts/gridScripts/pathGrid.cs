@@ -98,6 +98,7 @@ public class PathGrid : MonoBehaviour
         return neighbors;
     }
 
+    //for getting cost from start and heuristic
     public int getCost(Node start, Node end)
     {
         return Mathf.Abs(start.getNodeXLoc() - end.getNodeXLoc()) + Mathf.Abs(start.getNodeYLoc() - end.getNodeYLoc());

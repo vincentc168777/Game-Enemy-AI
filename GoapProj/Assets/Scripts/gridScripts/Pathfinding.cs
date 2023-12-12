@@ -40,12 +40,12 @@ public class Pathfinding : MonoBehaviour
         Node s = grid.worldPosToNode(start);
         Node g = grid.worldPosToNode(goal);
 
-        ///add start to frontier, costSpFar, and cameFrom
-
+        // clear info from previous pathfinding 
         cameFrom.Clear();
         costSoFar.Clear();
         frontier.Clear();
- 
+
+        //add start to frontier, costSpFar, and cameFrom
         cameFrom.Add(s, null);
         costSoFar.Add(s, 0);
         frontier.Enqueue(s, 0);
