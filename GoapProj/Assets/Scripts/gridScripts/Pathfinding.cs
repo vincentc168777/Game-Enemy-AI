@@ -11,7 +11,7 @@ public class Pathfinding : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Transform enemy;
 
-    private pathGrid grid;
+    private PathGrid grid;
     private Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
     private Dictionary<Node, int> costSoFar = new Dictionary<Node, int>();
     private SimplePriorityQueue<Node> frontier = new SimplePriorityQueue<Node>();
@@ -19,7 +19,7 @@ public class Pathfinding : MonoBehaviour
     void Awake()
     {
         //gets pathGrid class
-        grid = GetComponent<pathGrid>();
+        grid = GetComponent<PathGrid>();
     }
 
     private void Update()

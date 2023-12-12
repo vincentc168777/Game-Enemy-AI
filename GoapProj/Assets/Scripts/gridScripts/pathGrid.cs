@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-public class pathGrid : MonoBehaviour
+public class PathGrid : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private Node[,] grid;
