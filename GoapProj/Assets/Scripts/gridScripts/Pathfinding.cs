@@ -4,6 +4,7 @@ using UnityEngine;
 using Priority_Queue;
 using System.Runtime.CompilerServices;
 using System;
+using Unity.VisualScripting;
 
 
 public class Pathfinding : MonoBehaviour
@@ -12,6 +13,7 @@ public class Pathfinding : MonoBehaviour
     [SerializeField] private Transform enemy;
 
     private PathGrid grid;
+    private List<Node> foundpath;
     private Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
     private Dictionary<Node, int> costSoFar = new Dictionary<Node, int>();
     private SimplePriorityQueue<Node> frontier = new SimplePriorityQueue<Node>();
@@ -24,14 +26,32 @@ public class Pathfinding : MonoBehaviour
 
     private void Update()
     {
-        /*
-         *  if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            findPath(player.position, enemy.position);
+            StartCoroutine(followPath(foundpath, player));
+            
+        }
+          
+       
+  
+    }
+
+    public IEnumerator followPath(List<Node> pathList, Transform movable)
+    {
+        int i = 0;
+        Vector3 destination;
+        while (i < pathList.Count)
+        {
+            destination = new Vector3(pathList[i].getNodePos().x, 1, pathList[i].getNodePos().z);
+            movable.position = Vector3.MoveTowards(movable.position, destination, 5 * Time.deltaTime);
+            if (movable.position == destination)
             {
-                findPath(player.position, enemy.position);
+                i++;
             }
-        **/
-          findPath(player.position, enemy.position);
-        
+
+            yield return null;
+        }
         
     }
 
@@ -61,6 +81,7 @@ public class Pathfinding : MonoBehaviour
                  *  reversing from curr
                  */
                 grid.setPath(retracePath(curr, s));
+                foundpath = retracePath(curr, s);
                 return;
             }
 
@@ -100,4 +121,5 @@ public class Pathfinding : MonoBehaviour
         return path;
     }
     
+
 }

@@ -34,6 +34,23 @@ public class PathGrid : MonoBehaviour
         createGrid();
     }
 
+    private void createGrid()
+    {
+        grid = new Node[gridNodeSizeX, gridNodeSizeY];
+
+        Vector3 bottomLeft = transform.position - (Vector3.right * gridNodeSizeX / 2) - (Vector3.forward * gridNodeSizeY / 2);
+
+        for (int x = 0; x < gridNodeSizeX; x++)
+        {
+            for (int y = 0; y < gridNodeSizeY; y++)
+            {
+                Vector3 nodePos = bottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
+                bool walkable = !(Physics.CheckSphere(nodePos, nodeRadius, unWalkableMask));
+                grid[x, y] = new Node(walkable, nodePos, x, y);
+            }
+        }
+    }
+
     public Node worldPosToNode(Vector3 worldpos)
     {
         float xPercent = worldpos.x / gridNodeSizeX + .5f;
@@ -108,25 +125,6 @@ public class PathGrid : MonoBehaviour
     {
         generatedPath = inputpathList;
     }
-
-    private void createGrid()
-    {
-        grid = new Node[gridNodeSizeX, gridNodeSizeY];
-
-        Vector3 bottomLeft = transform.position - (Vector3.right * gridNodeSizeX / 2) - (Vector3.forward * gridNodeSizeY / 2);
-
-        for(int x = 0; x < gridNodeSizeX; x++)
-        {
-            for(int y = 0; y < gridNodeSizeY; y++)
-            {
-                Vector3 nodePos = bottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-                bool walkable = !(Physics.CheckSphere(nodePos, nodeRadius, unWalkableMask));
-                grid[x, y] = new Node(walkable, nodePos, x, y);
-            }
-        }
-    }
-
-    
 
     private void OnDrawGizmos()
     {
