@@ -115,6 +115,8 @@ public class PathGrid : MonoBehaviour
         return neighbors;
     }
 
+
+
     //for getting cost from start and heuristic
     public int getCost(Node start, Node end)
     {
@@ -144,7 +146,7 @@ public class PathGrid : MonoBehaviour
                 
                 
                 
-                Gizmos.DrawCube(n.getNodePos(), Vector3.one * (nodeDiameter - .1f));
+                Gizmos.DrawCube(n.getNodeWorldPos(), Vector3.one * (nodeDiameter - .1f));
             }
         }
     }

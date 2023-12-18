@@ -5,13 +5,11 @@ using Priority_Queue;
 using System.Runtime.CompilerServices;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 
 public class Pathfinding : MonoBehaviour
 {
-    [SerializeField] private Transform player;
-    [SerializeField] private Transform enemy;
-
     private PathGrid grid;
     private List<Node> foundpath;
     private Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
@@ -24,35 +22,9 @@ public class Pathfinding : MonoBehaviour
         grid = GetComponent<PathGrid>();
     }
 
-    private void Update()
+    public List<Node> getFoundPath()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            findPath(player.position, enemy.position);
-            StartCoroutine(followPath(foundpath, player));
-            
-        }
-          
-       
-  
-    }
-
-    public IEnumerator followPath(List<Node> pathList, Transform movable)
-    {
-        int i = 0;
-        Vector3 destination;
-        while (i < pathList.Count)
-        {
-            destination = new Vector3(pathList[i].getNodePos().x, 1, pathList[i].getNodePos().z);
-            movable.position = Vector3.MoveTowards(movable.position, destination, 5 * Time.deltaTime);
-            if (movable.position == destination)
-            {
-                i++;
-            }
-
-            yield return null;
-        }
-        
+        return foundpath;
     }
 
     public void findPath(Vector3 start, Vector3 goal)
@@ -118,8 +90,37 @@ public class Pathfinding : MonoBehaviour
         //finally add startNode to the list then reverse the list
         path.Add(pathStart);
         path.Reverse();
+        path = simplifyPath(path);
         return path;
     }
     
+    //need to debug corner issue and the last node wont get added sometimes if enemy is in the same direction as player path
+    private List<Node> simplifyPath(List<Node> pathlist)
+    {
+        List<Node> newL = new List<Node>();
+        Vector2 oldDirection = Vector2.zero;
+
+        for(int i = 1; i < pathlist.Count; i++)
+        {
+            Vector2 newDirection = new Vector2(pathlist[i].getNodeWorldPosX() - pathlist[i - 1].getNodeWorldPosX(), pathlist[i].getNodeWorldPosZ() - pathlist[i - 1].getNodeWorldPosZ());
+            if(newDirection != oldDirection)
+            {
+                //we add the previous node to the one that changes direction
+                newL.Add(pathlist[i - 1]);
+            }
+            oldDirection = newDirection;
+        }
+        // once we finish simplifying the path, we need to check if the enemy destination node is in the list
+        Vector2 lastNodeDir = new Vector2(pathlist[pathlist.Count - 1].getNodeWorldPosX() - pathlist[pathlist.Count - 2].getNodeWorldPosX(), pathlist[pathlist.Count - 1].getNodeWorldPosZ() - pathlist[pathlist.Count - 2].getNodeWorldPosZ());
+        if (lastNodeDir == oldDirection)
+        {
+            newL.Add(pathlist[pathlist.Count - 1]);
+        }
+
+        return newL;
+    }
+
+    
+
 
 }

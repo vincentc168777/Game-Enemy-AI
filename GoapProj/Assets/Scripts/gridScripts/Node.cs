@@ -21,9 +21,19 @@ public class Node
         this.nodeYLoc = nodeYLoc;
     }
 
-    public Vector3 getNodePos()
+    public Vector3 getNodeWorldPos()
     {
         return worldPos;
+    }
+
+    public float getNodeWorldPosX()
+    {
+        return worldPos.x;
+    }
+
+    public float getNodeWorldPosZ()
+    {
+        return worldPos.z;
     }
 
     public bool getWalkable()
