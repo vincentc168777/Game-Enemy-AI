@@ -10,6 +10,8 @@ using UnityEngine.UIElements;
 
 public class Pathfinding : MonoBehaviour
 {
+    
+
     private PathGrid grid;
     private List<Node> foundpath;
     private Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
@@ -64,7 +66,7 @@ public class Pathfinding : MonoBehaviour
                     continue;
                 }
                 // get cost used to get dist from curr to next node
-                int newCost = costSoFar[curr] + grid.getCost(curr, next);
+                int newCost = costSoFar[curr] + grid.getCost(curr, next) + curr.getmovePenalty();
 
                 if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                 {

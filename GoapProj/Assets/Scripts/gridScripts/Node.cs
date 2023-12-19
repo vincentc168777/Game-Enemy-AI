@@ -12,13 +12,15 @@ public class Node
     // costs hCost = dist cost goal, gCost cost from start
     private int hCost;
     private int gCost;
+    private int movePenalty;
 
-    public Node(bool walk, Vector3 wp, int nodeXLoc, int nodeYLoc)
+    public Node(bool walk, Vector3 wp, int nodeXLoc, int nodeYLoc, int movePen)
     {
         worldPos = wp;
         walkable = walk;
         this.nodeXLoc = nodeXLoc;
         this.nodeYLoc = nodeYLoc;
+        movePenalty = movePen;
     }
 
     public Vector3 getNodeWorldPos()
@@ -64,5 +66,14 @@ public class Node
     public void setGCost(int g)
     {
         gCost = g;
+    }
+
+    public void setMovePenalty(int n)
+    {
+        movePenalty = n;
+    }
+    public int getmovePenalty()
+    {
+        return movePenalty;
     }
 }

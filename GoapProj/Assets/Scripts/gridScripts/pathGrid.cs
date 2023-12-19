@@ -8,7 +8,12 @@ using UnityEngine;
 public class PathGrid : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    [SerializeField] private Node[,] grid;
+    private Node[,] grid;
+
+    [SerializeField] private List<RegionType> regions;
+
+    [SerializeField] private LayerMask walkableLayers;
+    private Dictionary<int, int> movePenDict = new Dictionary<int, int>();
 
     [SerializeField] private LayerMask unWalkableMask;
     [SerializeField] private GameObject groundplane;
@@ -20,7 +25,7 @@ public class PathGrid : MonoBehaviour
     [SerializeField] private float nodeRadius;
     [SerializeField] private float nodeDiameter;
 
-    [SerializeField] private List<Node> generatedPath;
+    private List<Node> generatedPath;
     
     // Start is called before the first frame update
     void Start()
@@ -31,6 +36,20 @@ public class PathGrid : MonoBehaviour
         //calc nodes required for x and y
         gridNodeSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridNodeSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
+
+        /* takes the binary value of each layer and adds it to walkableLayers using bitwise or
+         * each layer's binary has 32 bits, each zero representing layernumber first zero  mean index0
+         * index 9 is 10_0000_0000
+         * so 10_0000_0001 means that we have layer index 0 and 9
+         */
+        foreach(RegionType r in regions)
+        {
+            walkableLayers |= r.getRegionLayer().value;
+            int layerIndex = (int) Mathf.Log(r.getRegionLayer().value, 2);
+            // dictionary so we dont have to loop through array of layers to find the one we hit
+            movePenDict.Add(layerIndex, r.getMovePenalty());
+        }
+
         createGrid();
     }
 
@@ -46,7 +65,25 @@ public class PathGrid : MonoBehaviour
             {
                 Vector3 nodePos = bottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                 bool walkable = !(Physics.CheckSphere(nodePos, nodeRadius, unWalkableMask));
-                grid[x, y] = new Node(walkable, nodePos, x, y);
+
+                /**
+                 * ray will come from above the node and point down.
+                 * the hit variable will have the resulting layer that was hit by the ray.
+                 * walkable has all the layers that can possibly be hit.
+                 */
+                int movePen = 0;
+                if (walkable == true)
+                {
+                    Ray r = new Ray(nodePos + (Vector3.up * 30), Vector3.down);
+                    RaycastHit hit;
+                    if(Physics.Raycast(r, out hit, 100f, walkableLayers))
+                    {
+                        movePen = movePenDict[hit.collider.gameObject.layer];
+                    }
+                }
+
+
+                grid[x, y] = new Node(walkable, nodePos, x, y, movePen);
             }
         }
     }

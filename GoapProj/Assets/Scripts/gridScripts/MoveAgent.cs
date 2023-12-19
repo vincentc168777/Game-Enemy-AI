@@ -31,7 +31,7 @@ public class MoveAgent : MonoBehaviour
         }
     }
 
-    public IEnumerator followPath(List<Node> pathList, Transform movable)
+    private IEnumerator followPath(List<Node> pathList, Transform movable)
     {
         int i = 0;
         Vector3 destination;
@@ -40,6 +40,7 @@ public class MoveAgent : MonoBehaviour
             destination = new Vector3(pathList[i].getNodeWorldPosX(), 1, pathList[i].getNodeWorldPosZ());
 
             rotateAgent(movable, destination);
+ 
             movable.position = Vector3.MoveTowards(movable.position, destination, moveSpeed * Time.deltaTime);
 
             if (movable.position == destination)
