@@ -72,20 +72,76 @@ public class PathGrid : MonoBehaviour
                  * walkable has all the layers that can possibly be hit.
                  */
                 int movePen = 0;
-                if (walkable == true)
+                
+                Ray r = new Ray(nodePos + (Vector3.up * 30), Vector3.down);
+                RaycastHit hit;
+                if(Physics.Raycast(r, out hit, 100f, walkableLayers))
                 {
-                    Ray r = new Ray(nodePos + (Vector3.up * 30), Vector3.down);
-                    RaycastHit hit;
-                    if(Physics.Raycast(r, out hit, 100f, walkableLayers))
-                    {
-                        movePen = movePenDict[hit.collider.gameObject.layer];
-                    }
+                    movePen = movePenDict[hit.collider.gameObject.layer];
                 }
-
 
                 grid[x, y] = new Node(walkable, nodePos, x, y, movePen);
             }
         }
+
+        boxBlur(3);
+    }
+
+    private void boxBlur(int blurScale)
+    {
+        int kernalDimensions = 2 * blurScale - 1;
+        int kernalRadius = (kernalDimensions - 1) / 2;
+
+        int[,] horziontal = new int[gridNodeSizeX, gridNodeSizeX];
+        int[,] vertical = new int[gridNodeSizeX, gridNodeSizeX];
+
+        //calculate horizonatal first
+        for(int y = 0; y < gridNodeSizeY; y++)
+        {
+            // find sum for first cell of horz array
+            for(int x = -kernalRadius; x <= kernalRadius; x++)
+            {
+                int kernalIndex = Mathf.Clamp(x, 0, kernalRadius);
+                horziontal[0, y] += grid[kernalIndex, y].getmovePenalty();
+            }
+
+            for (int x = 1; x < gridNodeSizeX; x++)
+            {
+                int addIndex = Mathf.Clamp(x + kernalRadius, 0, gridNodeSizeX - 1);
+                int subtractIndex = Mathf.Clamp(x - kernalRadius - 1, 0, gridNodeSizeX);
+
+                // value for array cell = previous sum - previous leftmost number in kernel + new rightmost number in kernel
+                horziontal[x, y] = horziontal[x - 1, y] - grid[subtractIndex, y].getmovePenalty() + grid[addIndex, y].getmovePenalty();
+            }
+            // then calculate the numbers for the rest of the row
+
+        }
+
+        // do the same for vertical 
+        for (int x = 0; x < gridNodeSizeX; x++)
+        {
+            for(int y = -kernalRadius; y <= kernalRadius; y++)
+            {
+                int kernalYIndex = Mathf.Clamp(y, 0, kernalRadius);
+                vertical[x, 0] += horziontal[x, kernalYIndex];
+            }
+
+            for (int y = 1; y < gridNodeSizeY; y++)
+            {
+                int addIndex = Mathf.Clamp(y, 0, gridNodeSizeY - 1);
+                int subIndex = Mathf.Clamp(y - kernalRadius - 1, 0, gridNodeSizeY);
+
+                vertical[x, y] = vertical[x, y - 1] - horziontal[x, subIndex] + horziontal[x, addIndex];
+
+                /* cast to float to prevent integer division from rounding down quotient
+                 * we dont want the quotient to be rounded down, we want the decimal values so we can use RoundToInt 
+                 * to find the best newPenalty value based on how close the decimal is to an integer
+                 */
+                int newPenalty = Mathf.RoundToInt( (float) vertical[x, y] / (kernalDimensions * kernalDimensions));
+                grid[x, y].setMovePenalty(newPenalty);
+            }
+        }
+
     }
 
     public Node worldPosToNode(Vector3 worldpos)
@@ -97,7 +153,7 @@ public class PathGrid : MonoBehaviour
         Mathf.Clamp01(yPercent);
 
         /*we clamp the result of gridNodeSizeX * xPercent & gridNodeSizeY * yPercent to their gridNodeSize - 1, as the array with
-          the nodes go from 0 -> girdNodeSize - 1, so if player goes beyond, the x an y int will still be gridNodeSize - 1
+          the nodes go from 0 -> gridNodeSize - 1, so if player goes beyond, the x an y int will still be gridNodeSize - 1
             
           Not only that, if we place the player at the very edges, the percent calcluation will 
           return gridNodeSize(results in out of bounds for array), not gridNodeSize - 1, 
@@ -152,7 +208,7 @@ public class PathGrid : MonoBehaviour
         return neighbors;
     }
 
-
+    
 
     //for getting cost from start and heuristic
     public int getCost(Node start, Node end)

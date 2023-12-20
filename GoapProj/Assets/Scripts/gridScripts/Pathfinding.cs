@@ -63,6 +63,7 @@ public class Pathfinding : MonoBehaviour
             {
                 if (!next.getWalkable())
                 {
+                    // dont add any unwalkable nodes
                     continue;
                 }
                 // get cost used to get dist from curr to next node
@@ -100,6 +101,9 @@ public class Pathfinding : MonoBehaviour
     private List<Node> simplifyPath(List<Node> pathlist)
     {
         List<Node> newL = new List<Node>();
+        /** old Direction will have 4 possible vector2: (1, 0), (0, 1), (-1, 0), (0, -1)
+         *  those 4 represent what direction the nodes changed to 
+         */
         Vector2 oldDirection = Vector2.zero;
 
         for(int i = 1; i < pathlist.Count; i++)
@@ -107,8 +111,16 @@ public class Pathfinding : MonoBehaviour
             Vector2 newDirection = new Vector2(pathlist[i].getNodeWorldPosX() - pathlist[i - 1].getNodeWorldPosX(), pathlist[i].getNodeWorldPosZ() - pathlist[i - 1].getNodeWorldPosZ());
             if(newDirection != oldDirection)
             {
-                //we add the previous node to the one that changes direction
-                newL.Add(pathlist[i - 1]);
+                /* we add the previous node to the one that changes direction (i - 1)
+                 * to prevent player from going through corners but makes movement look choppy
+                 * 
+                 * or we cun just use i (the index of node that changes direction)
+                 * for more smooth looking movement
+                 * 
+                 * depends is envirnment has narrow paths or not
+                 */
+                
+                newL.Add(pathlist[i]);
             }
             oldDirection = newDirection;
         }
