@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class PathGrid : MonoBehaviour
 {
-    [SerializeField] private Transform player;
+    
     private Node[,] grid;
 
     [SerializeField] private List<RegionType> regions;

@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class MoveAgent : MonoBehaviour
 {
-    [SerializeField] private Transform player;
-    [SerializeField] private Transform enemy;
+    [SerializeField] private GameObject AStar;
+    [SerializeField] private Transform agent;
+    [SerializeField] private Transform target;
     [SerializeField] private float moveSpeed;
     private Pathfinding pathFindClass;
     private List<Node> agentPath;
     // Start is called before the first frame update
     private void Awake()
     {
-        pathFindClass = GetComponent<Pathfinding>();
+        pathFindClass = AStar.GetComponent<Pathfinding>();
+        agent = GetComponent<Transform>();
     }
     void Start()
     {
@@ -24,9 +26,9 @@ public class MoveAgent : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            pathFindClass.findPath(player.position, enemy.position);
+            pathFindClass.findPath(agent.position, target.position);
             agentPath = pathFindClass.getFoundPath();
-            StartCoroutine(followPath(agentPath, player));
+            StartCoroutine(followPath(agentPath, agent));
 
         }
     }
