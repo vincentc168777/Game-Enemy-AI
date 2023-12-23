@@ -10,8 +10,6 @@ using UnityEngine.UIElements;
 
 public class Pathfinding : MonoBehaviour
 {
-    
-
     private PathGrid grid;
     private List<Node> foundpath;
     private Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();

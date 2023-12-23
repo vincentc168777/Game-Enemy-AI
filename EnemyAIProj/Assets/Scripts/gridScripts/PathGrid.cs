@@ -113,7 +113,6 @@ public class PathGrid : MonoBehaviour
                 // value for array cell = previous sum - previous leftmost number in kernel + new rightmost number in kernel
                 horziontal[x, y] = horziontal[x - 1, y] - grid[subtractIndex, y].getmovePenalty() + grid[addIndex, y].getmovePenalty();
             }
-            // then calculate the numbers for the rest of the row
 
         }
 

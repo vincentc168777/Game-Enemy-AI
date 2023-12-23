@@ -40,7 +40,10 @@ public class MoveAgent : MonoBehaviour
             destination = new Vector3(pathList[i].getNodeWorldPosX(), 1, pathList[i].getNodeWorldPosZ());
 
             rotateAgent(movable, destination);
- 
+
+            /** dont use character controller here. the move method in char controller uses
+             *  a direction, not a destination
+             */
             movable.position = Vector3.MoveTowards(movable.position, destination, moveSpeed * Time.deltaTime);
 
             if (movable.position == destination)
