@@ -207,7 +207,15 @@ public class PathGrid : MonoBehaviour
         return neighbors;
     }
 
-    
+    public int getGridXDimension()
+    {
+        return gridNodeSizeX;
+    }
+
+    public int getGridYDimension()
+    {
+        return gridNodeSizeY;
+    }
 
     //for getting cost from start and heuristic
     public int getCost(Node start, Node end)
@@ -222,10 +230,10 @@ public class PathGrid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (grid != null)
-        {
 
-            foreach(Node n in grid)
+        if(grid != null)
+        {
+            foreach (Node n in grid)
             {
                 Gizmos.color = n.getWalkable() ? Color.white : Color.red;
                 if (generatedPath != null)
@@ -235,12 +243,13 @@ public class PathGrid : MonoBehaviour
                         Gizmos.color = Color.black;
                     }
                 }
-                
-                
-                
+
+
+
                 Gizmos.DrawCube(n.getNodeWorldPos(), Vector3.one * (nodeDiameter - .1f));
             }
         }
+        
     }
 
 

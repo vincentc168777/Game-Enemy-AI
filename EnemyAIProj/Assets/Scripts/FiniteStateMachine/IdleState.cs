@@ -11,12 +11,20 @@ public class IdleState : BaseState
         
     }
 
-    public override void UpdateState()
+    public override void UpdateState(StateMachineManager stateMan)
     {
         Debug.Log("Enter Idle Update");
+        bool isPlayerInRange = targetInRange(stateMan.getSelfTransform(), stateMan.getPlayerTrans());
+        if (isPlayerInRange)
+        {
+            ExitState(stateMan);
+            stateMan.changeState(stateMan.GetAttackState());
+        }
     }
 
-    public override void ExitState()
+
+
+    public override void ExitState(StateMachineManager stateMan)
     {
         Debug.Log("Idle Exit");
     }
