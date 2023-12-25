@@ -29,13 +29,13 @@ public class Pathfinding : MonoBehaviour
 
     public void findPath(Vector3 start, Vector3 goal)
     {
-        Node s = grid.worldPosToNode(start);
-        Node g = grid.worldPosToNode(goal);
-
         // clear info from previous pathfinding 
         cameFrom.Clear();
         costSoFar.Clear();
         frontier.Clear();
+        
+        Node s = grid.worldPosToNode(start);
+        Node g = grid.worldPosToNode(goal);
 
         //add start to frontier, costSpFar, and cameFrom
         cameFrom.Add(s, null);
@@ -102,31 +102,39 @@ public class Pathfinding : MonoBehaviour
         /** old Direction will have 4 possible vector2: (1, 0), (0, 1), (-1, 0), (0, -1)
          *  those 4 represent what direction the nodes changed to 
          */
-        Vector2 oldDirection = Vector2.zero;
+        if(pathlist.Count > 1)
+        {
+            Vector2 oldDirection = Vector2.zero;
 
-        for(int i = 1; i < pathlist.Count; i++)
-        {
-            Vector2 newDirection = new Vector2(pathlist[i].getNodeWorldPosX() - pathlist[i - 1].getNodeWorldPosX(), pathlist[i].getNodeWorldPosZ() - pathlist[i - 1].getNodeWorldPosZ());
-            if(newDirection != oldDirection)
+            for (int i = 1; i < pathlist.Count; i++)
             {
-                /* we add the previous node to the one that changes direction (i - 1)
-                 * to prevent player from going through corners but makes movement look choppy
-                 * 
-                 * or we cun just use i (the index of node that changes direction)
-                 * for more smooth looking movement
-                 * 
-                 * depends is envirnment has narrow paths or not
-                 */
-                
-                newL.Add(pathlist[i]);
+                Vector2 newDirection = new Vector2(pathlist[i].getNodeWorldPosX() - pathlist[i - 1].getNodeWorldPosX(), pathlist[i].getNodeWorldPosZ() - pathlist[i - 1].getNodeWorldPosZ());
+                if (newDirection != oldDirection)
+                {
+                    /* we add the previous node to the one that changes direction (i - 1)
+                     * to prevent player from going through corners but makes movement look choppy
+                     * 
+                     * or we cun just use i (the index of node that changes direction)
+                     * for more smooth looking movement
+                     * 
+                     * depends is envirnment has narrow paths or not
+                     */
+
+                    newL.Add(pathlist[i]);
+                }
+                oldDirection = newDirection;
             }
-            oldDirection = newDirection;
+            // once we finish simplifying the path, we need to check if the destination node is in the list
+            Vector2 lastNodeDir = new Vector2(pathlist[pathlist.Count - 1].getNodeWorldPosX() - pathlist[pathlist.Count - 2].getNodeWorldPosX(), pathlist[pathlist.Count - 1].getNodeWorldPosZ() - pathlist[pathlist.Count - 2].getNodeWorldPosZ());
+            if (lastNodeDir == oldDirection)
+            {
+                newL.Add(pathlist[pathlist.Count - 1]);
+            }
         }
-        // once we finish simplifying the path, we need to check if the enemy destination node is in the list
-        Vector2 lastNodeDir = new Vector2(pathlist[pathlist.Count - 1].getNodeWorldPosX() - pathlist[pathlist.Count - 2].getNodeWorldPosX(), pathlist[pathlist.Count - 1].getNodeWorldPosZ() - pathlist[pathlist.Count - 2].getNodeWorldPosZ());
-        if (lastNodeDir == oldDirection)
+        else
         {
-            newL.Add(pathlist[pathlist.Count - 1]);
+            // if pathlist is just 1 node, just assign it to newL
+            newL = pathlist;
         }
 
         return newL;
