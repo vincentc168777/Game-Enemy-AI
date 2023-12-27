@@ -5,18 +5,16 @@ using UnityEngine;
 
 public class AttackState : BaseState
 {
-
+    private List<Node> attackPath;
     public override void EnterState()
     {
         Debug.Log("Enter Attack");
-     
     }
 
     public override void UpdateState(StateMachineManager stateMan)
     {
         Debug.Log("Enter Attack Update");
-        Debug.Log("bang bang");
-        bool isPlayerInRange = targetInRange(stateMan.getSelfTransform(), stateMan.getPlayerTrans());
+        bool isPlayerInRange = stateMan.targetInRange(stateMan.getSelfTransform(), stateMan.getPlayerTrans());
         if (!isPlayerInRange)
         {
             ExitState(stateMan);
@@ -39,5 +37,15 @@ public class AttackState : BaseState
         stateMan.changeState(newState);
     }
 
+    private void attackPlayer(StateMachineManager stateMan)
+    {
+        
+        
+    }
 
+    private void resetState()
+    {
+        attackPath = null;
+        
+    }
 }

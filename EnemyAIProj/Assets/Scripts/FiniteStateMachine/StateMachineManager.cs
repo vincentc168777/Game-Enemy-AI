@@ -14,14 +14,20 @@ public class StateMachineManager : MonoBehaviour
     private PathGrid grid;
     private Pathfinding pathFinder;
 
+    private CharacterController enemyCont;
+
     [SerializeField] private Transform player;
     [SerializeField] private GameObject aStar;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float checkRange;
     // Start is called before the first frame update
     void Awake()
     {
-        idle = new IdleState();
-        patrol = new PatrolState();
-        attack = new AttackState();
+        idle = GetComponent<IdleState>();
+        patrol = GetComponent<PatrolState>();
+        attack = GetComponent<AttackState>();
+
+        enemyCont = GetComponent<CharacterController>();
 
         pathFinder = aStar.GetComponent<Pathfinding>();
         grid = aStar.GetComponent<PathGrid>();
@@ -41,6 +47,16 @@ public class StateMachineManager : MonoBehaviour
     public void changeState(BaseState newState)
     {
         currentState = newState;
+    }
+
+    public bool targetInRange(Transform self, Transform target)
+    {
+        float dist = Vector3.Distance(self.position, target.position);
+        if (dist < checkRange)
+        {
+            return true;
+        }
+        return false;
     }
 
     public Transform getPlayerTrans()
@@ -76,6 +92,16 @@ public class StateMachineManager : MonoBehaviour
     public PathGrid getGrid()
     {
         return grid;
+    }
+
+    public float getMoveSpeed()
+    {
+        return moveSpeed;
+    }
+
+    public CharacterController getEnemyController()
+    {
+        return enemyCont;
     }
    
 }

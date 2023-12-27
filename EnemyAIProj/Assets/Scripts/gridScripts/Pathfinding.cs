@@ -114,13 +114,13 @@ public class Pathfinding : MonoBehaviour
                     /* we add the previous node to the one that changes direction (i - 1)
                      * to prevent player from going through corners but makes movement look choppy
                      * 
-                     * or we cun just use i (the index of node that changes direction)
+                     * or we can just use i (the index of node that changes direction)
                      * for more smooth looking movement
                      * 
                      * depends is envirnment has narrow paths or not
                      */
 
-                    newL.Add(pathlist[i]);
+                    newL.Add(pathlist[i - 1]);
                 }
                 oldDirection = newDirection;
             }

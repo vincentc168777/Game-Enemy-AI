@@ -14,7 +14,7 @@ public class IdleState : BaseState
     public override void UpdateState(StateMachineManager stateMan)
     {
         Debug.Log("Enter Idle Update");
-        bool isPlayerInRange = targetInRange(stateMan.getSelfTransform(), stateMan.getPlayerTrans());
+        bool isPlayerInRange = stateMan.targetInRange(stateMan.getSelfTransform(), stateMan.getPlayerTrans());
         if (isPlayerInRange)
         {
             ExitState(stateMan);
