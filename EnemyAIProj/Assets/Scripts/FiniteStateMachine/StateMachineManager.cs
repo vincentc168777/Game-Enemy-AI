@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
+
 using UnityEngine;
 
 public class StateMachineManager : MonoBehaviour
@@ -20,6 +18,7 @@ public class StateMachineManager : MonoBehaviour
     [SerializeField] private GameObject aStar;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float checkRange;
+    [SerializeField] private float idleRotateSpeed;
     // Start is called before the first frame update
     void Awake()
     {
@@ -102,6 +101,11 @@ public class StateMachineManager : MonoBehaviour
     public CharacterController getEnemyController()
     {
         return enemyCont;
+    }
+
+    public float getIdleRotateSpeed()
+    {
+        return idleRotateSpeed;
     }
    
 }

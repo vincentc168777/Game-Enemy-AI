@@ -1,4 +1,4 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,36 +23,41 @@ public class PatrolState : BaseState
         bool isPlayerInRange = stateMan.targetInRange(stateMan.getSelfTransform(), stateMan.getPlayerTrans());
         if (isPlayerInRange)
         {
-            stateRunning = false;
-            StopCoroutine(pathCoroutine);
-            ExitState(stateMan);
-            stateMan.changeState(stateMan.GetAttackState());
+            ExitState(stateMan, stateMan.GetAttackState());
         }
 
         if (stateRunning)
         {
             if (!foundPath)
             {
-                Debug.Log("enter found path if statement");
-                patrolPath = findPath(stateMan);
+                patrolPath = findRandomPath(stateMan);
                 foundPath = true;
 
                 pathCoroutine = StartCoroutine(followPath(stateMan, patrolPath));
 
             }
 
+            //when finished patrolling, choose to keep patrolling or stay idle
             currPos = new Vector3(stateMan.getSelfTransform().position.x, 0, stateMan.getSelfTransform().position.z);
             if (currPos == patrolPath[patrolPath.Count - 1].getNodeWorldPos())
             {
-                Debug.Log("REACHED PATROL DESTINATION");
                 resetState();
+                
+                if (pickDiffState())
+                {
+                    ExitState(stateMan, stateMan.GetIdleState());
+                }
+                
             }
         }
     }
 
-    public override void ExitState(StateMachineManager stateMan)
+    public override void ExitState(StateMachineManager stateMan, BaseState newState)
     {
+        stateRunning = false;
+        stopStateCoroutine();
         resetState();
+        stateMan.changeState(newState);
         Debug.Log("Patrol Exit");   
     }
 
@@ -63,60 +68,24 @@ public class PatrolState : BaseState
         foundPath = false;
     }
 
-    private List<Node> findPath(StateMachineManager stateMan)
+    private void stopStateCoroutine()
     {
-        //pick random walkable node on map
-        float x = ((stateMan.getGrid().getGridXDimension()) / 2);
-        float y = ((stateMan.getGrid().getGridYDimension()) / 2);
-        float xPos = Random.Range(-x, x);
-        float yPos = Random.Range(-y, y);
-
-        Vector3 patrolDest = new Vector3(xPos, 1, yPos);
-
-        Node destNode = stateMan.getGrid().worldPosToNode(patrolDest);
-        List<Node> destPath = null;
-        if (destNode.getWalkable())
+        if (pathCoroutine != null)
         {
-            stateMan.getPathFinder().findPath(stateMan.getSelfTransform().position, patrolDest);
-            destPath = stateMan.getPathFinder().getFoundPath();
+            StopCoroutine(pathCoroutine);
+        }
+    }
+
+    private bool pickDiffState()
+    {
+        int rand = Random.Range(0, 2);
+        if (rand == 0)
+        {
+            return true;
         }
         else
         {
-            //if we get unwalkable node, just make a path list with one node: the one its already on.
-            destPath = new List<Node>() { stateMan.getGrid().worldPosToNode(stateMan.getSelfTransform().position) };
-
+            return false;
         }
-
-        return destPath;
-    }
-
-    private IEnumerator followPath(StateMachineManager stateMan, List<Node> path)
-    {
-        Debug.Log("enter coroutine");
-        int i = 0;
-        if (path != null)
-        {
-            while (i < path.Count)
-            {
-                Vector3 walkDest = new Vector3(path[i].getNodeWorldPosX(), 1, path[i].getNodeWorldPosZ());
-                rotateObj(stateMan, walkDest);
-
-                stateMan.getSelfTransform().position = Vector3.MoveTowards(stateMan.getSelfTransform().position, walkDest, stateMan.getMoveSpeed() * Time.deltaTime);
-
-                if (stateMan.getSelfTransform().position == walkDest)
-                {
-                    i++;
-                }
-                yield return null;
-            }
-
-        }
-    }
-
-    private void rotateObj(StateMachineManager stateMan, Vector3 target)
-    {
-        Vector3 lookVec = target - stateMan.getSelfTransform().position;
-        Vector3 lookDir = Vector3.RotateTowards(stateMan.getSelfTransform().forward, lookVec, stateMan.getMoveSpeed() * Time.deltaTime, 0);
-        stateMan.getSelfTransform().rotation = Quaternion.LookRotation(lookDir);
     }
 }

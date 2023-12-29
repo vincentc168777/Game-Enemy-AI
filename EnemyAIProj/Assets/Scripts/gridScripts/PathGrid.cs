@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
+
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
+
 using UnityEngine;
 
 public class PathGrid : MonoBehaviour
@@ -227,6 +226,7 @@ public class PathGrid : MonoBehaviour
     {
         generatedPath = inputpathList;
     }
+
 
     private void OnDrawGizmos()
     {
