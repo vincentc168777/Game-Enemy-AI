@@ -8,7 +8,7 @@ public class IdleState : BaseState
     private float targetAngle;
     private float turnAngle;
 
-    public override void EnterState()
+    public override void EnterState(StateMachineManager stateMan)
     {
         Debug.Log("Enter Idle");
         

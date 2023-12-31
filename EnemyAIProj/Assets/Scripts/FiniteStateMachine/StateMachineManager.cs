@@ -12,13 +12,15 @@ public class StateMachineManager : MonoBehaviour
     private PathGrid grid;
     private Pathfinding pathFinder;
 
-    private CharacterController enemyCont;
 
     [SerializeField] private Transform player;
     [SerializeField] private GameObject aStar;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float checkRange;
     [SerializeField] private float idleRotateSpeed;
+
+    [SerializeField] private Transform bulletSpawnLoc;
+    [SerializeField] private GameObject bullet;
     // Start is called before the first frame update
     void Awake()
     {
@@ -26,15 +28,13 @@ public class StateMachineManager : MonoBehaviour
         patrol = GetComponent<PatrolState>();
         attack = GetComponent<AttackState>();
 
-        enemyCont = GetComponent<CharacterController>();
-
         pathFinder = aStar.GetComponent<Pathfinding>();
         grid = aStar.GetComponent<PathGrid>();
     }
     void Start()
     {
         currentState = idle;
-        idle.EnterState();
+        idle.EnterState(this);
     }
 
     // Update is called once per frame
@@ -46,6 +46,7 @@ public class StateMachineManager : MonoBehaviour
     public void changeState(BaseState newState)
     {
         currentState = newState;
+        newState.EnterState(this);
     }
 
     public bool targetInRange(Transform self, Transform target)
@@ -57,7 +58,7 @@ public class StateMachineManager : MonoBehaviour
         }
         return false;
     }
-
+    #region getting transforms
     public Transform getPlayerTrans()
     {
         return player;
@@ -68,6 +69,13 @@ public class StateMachineManager : MonoBehaviour
         return transform;
     }
 
+    public Transform getBulletSpawn()
+    {
+        return bulletSpawnLoc;
+    }
+    #endregion
+
+    #region get states
     public IdleState GetIdleState()
     {
         return idle;
@@ -82,7 +90,9 @@ public class StateMachineManager : MonoBehaviour
     {
         return patrol;
     }
+    #endregion
 
+    #region pathfinding
     public Pathfinding getPathFinder()
     {
         return pathFinder;
@@ -92,20 +102,23 @@ public class StateMachineManager : MonoBehaviour
     {
         return grid;
     }
+    #endregion
 
+    #region getting speed
     public float getMoveSpeed()
     {
         return moveSpeed;
     }
-
-    public CharacterController getEnemyController()
-    {
-        return enemyCont;
-    }
-
     public float getIdleRotateSpeed()
     {
         return idleRotateSpeed;
     }
-   
+    #endregion
+
+    #region getting gameObjects
+    public GameObject getBullet()
+    {
+        return bullet;
+    }
+    #endregion
 }

@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +8,13 @@ public class AttackState : BaseState
     private List<Node> attackPath;
     private bool isStateRunning = false;
     private Coroutine attackCoroutine;
+    private Coroutine shootingCoroutine;
     private bool foundAttackPath = false;
     private Vector3 currPos;
-    public override void EnterState()
+    public override void EnterState(StateMachineManager stateMan)
     {
         Debug.Log("Enter Attack");
+        shootingCoroutine = StartCoroutine(shootBalls(stateMan));
     }
 
     public override void UpdateState(StateMachineManager stateMan)
@@ -29,6 +32,9 @@ public class AttackState : BaseState
 
         if (isStateRunning)
         {
+            //when attackin, always face player to shoot bullet in right direction
+            rotateObjTowards(stateMan, stateMan.getPlayerTrans().position);
+
             if (!foundAttackPath)
             {
                 attackPath = findSpecificPath(stateMan, stateMan.getPlayerTrans());
@@ -47,7 +53,7 @@ public class AttackState : BaseState
     public override void ExitState(StateMachineManager stateMan, BaseState newState)
     {
         isStateRunning = false;
-        stopStateCoroutine();
+        StopAllCoroutines();
         resetState();
         Debug.Log("Attack Exit");
         stateMan.changeState(newState);
@@ -59,7 +65,8 @@ public class AttackState : BaseState
         {
             StopCoroutine(attackCoroutine);
         }
-        attackCoroutine = StartCoroutine(followPath(stateMan, attackPath));
+        attackCoroutine = StartCoroutine(followPathNoTurning(stateMan, attackPath));
+        
     }
 
     private BaseState pickRandomState(StateMachineManager stateMan)
@@ -77,18 +84,21 @@ public class AttackState : BaseState
         return newState;
     }
 
+    private IEnumerator shootBalls(StateMachineManager stateMan)
+    {
+        while (true)
+        {
+            Instantiate(stateMan.getBullet(), stateMan.getBulletSpawn().position, stateMan.getSelfTransform().rotation);
+            yield return new WaitForSeconds(.5f);
+        }
+    }
+
     private void resetState()
     {
         attackPath = null;
-        attackCoroutine = null;
         foundAttackPath = false;
+        attackCoroutine = null;
+        shootingCoroutine = null;
     }
 
-    private void stopStateCoroutine()
-    {
-        if (attackCoroutine != null)
-        {
-            StopCoroutine(attackCoroutine);
-        }
-    }
 }

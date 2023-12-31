@@ -9,7 +9,7 @@ public class PatrolState : BaseState
     private bool foundPath = false;
     private bool stateRunning = false;
     private Coroutine pathCoroutine;
-    public override void EnterState()
+    public override void EnterState(StateMachineManager stateMan)
     {
         Debug.Log("Enter Patrol");
         

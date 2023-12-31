@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class BaseState : MonoBehaviour
 {
-    public abstract void EnterState();
+    public abstract void EnterState(StateMachineManager stateMan);
     //constanly checks for any condition that would result in exiting state
     public abstract void UpdateState(StateMachineManager stateMan);
     public abstract void ExitState(StateMachineManager stateMan, BaseState newState);
@@ -12,8 +12,6 @@ public abstract class BaseState : MonoBehaviour
     private protected List<Node> findRandomPath(StateMachineManager stateMan)
     {
         //pick random walkable node on map
-
-
         Node destNode = getRandomNode(stateMan);
         List<Node> destPath = null;
         if (destNode.getWalkable())
@@ -54,7 +52,6 @@ public abstract class BaseState : MonoBehaviour
 
     private protected IEnumerator followPath(StateMachineManager stateMan, List<Node> path)
     {
-        Debug.Log("enter coroutine");
         int i = 0;
         if (path != null)
         {
@@ -62,6 +59,27 @@ public abstract class BaseState : MonoBehaviour
             {
                 Vector3 walkDest = new Vector3(path[i].getNodeWorldPosX(), 1, path[i].getNodeWorldPosZ());
                 rotateObjTowards(stateMan, walkDest);
+
+                stateMan.getSelfTransform().position = Vector3.MoveTowards(stateMan.getSelfTransform().position, walkDest, stateMan.getMoveSpeed() * Time.deltaTime);
+
+                if (stateMan.getSelfTransform().position == walkDest)
+                {
+                    i++;
+                }
+                yield return null;
+            }
+
+        }
+    }
+
+    private protected IEnumerator followPathNoTurning(StateMachineManager stateMan, List<Node> path)
+    {
+        int i = 0;
+        if (path != null)
+        {
+            while (i < path.Count)
+            {
+                Vector3 walkDest = new Vector3(path[i].getNodeWorldPosX(), 1, path[i].getNodeWorldPosZ());
 
                 stateMan.getSelfTransform().position = Vector3.MoveTowards(stateMan.getSelfTransform().position, walkDest, stateMan.getMoveSpeed() * Time.deltaTime);
 
