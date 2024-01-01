@@ -19,7 +19,7 @@ public class AttackState : BaseState
 
     public override void UpdateState(StateMachineManager stateMan)
     {
-        Debug.Log("Enter Attack Update");
+        
 
         isStateRunning = true;
 
@@ -55,7 +55,7 @@ public class AttackState : BaseState
         isStateRunning = false;
         StopAllCoroutines();
         resetState();
-        Debug.Log("Attack Exit");
+        
         stateMan.changeState(newState);
     }
 

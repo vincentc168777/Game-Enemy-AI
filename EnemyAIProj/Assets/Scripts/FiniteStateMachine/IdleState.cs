@@ -10,7 +10,7 @@ public class IdleState : BaseState
 
     public override void EnterState(StateMachineManager stateMan)
     {
-        Debug.Log("Enter Idle");
+        
         
     }
 
@@ -18,7 +18,7 @@ public class IdleState : BaseState
     {
         isStateRunning = true;
 
-        Debug.Log("Enter Idle Update");
+        
 
         bool isPlayerInRange = stateMan.targetInRange(stateMan.getSelfTransform(), stateMan.getPlayerTrans());
         if (isPlayerInRange)
@@ -56,7 +56,7 @@ public class IdleState : BaseState
     {
         isStateRunning = false;
         resetState();
-        Debug.Log("Idle Exit");
+        
         stateMan.changeState(newState);
         
     }

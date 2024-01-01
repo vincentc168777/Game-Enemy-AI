@@ -11,12 +11,12 @@ public class PatrolState : BaseState
     private Coroutine pathCoroutine;
     public override void EnterState(StateMachineManager stateMan)
     {
-        Debug.Log("Enter Patrol");
+        
         
     }
     public override void UpdateState(StateMachineManager stateMan)
     {
-        Debug.Log("Enter Patrol Update");
+        
 
         stateRunning = true;
 
@@ -58,7 +58,7 @@ public class PatrolState : BaseState
         stopStateCoroutine();
         resetState();
         stateMan.changeState(newState);
-        Debug.Log("Patrol Exit");   
+           
     }
 
     private void resetState()
