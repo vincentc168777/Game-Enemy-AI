@@ -13,7 +13,7 @@ public class AttackState : BaseState
     private Vector3 currPos;
     public override void EnterState(StateMachineManager stateMan)
     {
-        Debug.Log("Enter Attack");
+        
         shootingCoroutine = StartCoroutine(shootBalls(stateMan));
     }
 
