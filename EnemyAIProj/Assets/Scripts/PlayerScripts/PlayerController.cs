@@ -14,8 +14,13 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region movement
+    private CharacterController playerCont;
+    private Rigidbody playerRB;
+
     [SerializeField] private float playerWalkSpeed;
     [SerializeField] private float playerRunSpeed;
+    //walking input will be processed into this vector
+    private Vector3 moveVec;
 
     #region stamina
     [SerializeField] private float maxStamina;
@@ -30,15 +35,24 @@ public class PlayerController : MonoBehaviour
     private bool canRun;
     #endregion
 
-    [SerializeField] private float gravity;
-    private CharacterController playerCont;
+ 
+   
+    
+
+    #region jumping
+    [SerializeField] private float jumpForce;
+
+    #endregion
 
     #endregion
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        playerCont = GetComponent<CharacterController>();
+   
+        playerRB = GetComponent<Rigidbody>();
+        playerRB.freezeRotation = true;
+
 
         currStamina = maxStamina;
 
@@ -51,7 +65,14 @@ public class PlayerController : MonoBehaviour
     {
         mouseInputs();
         moveInputs();
-        playerGravity();
+        SpeedControl();
+        manageStamina();
+    }
+
+    private void FixedUpdate()
+    {
+        movePlayer();
+        physicsJump();
     }
 
     private void mouseInputs()
@@ -84,22 +105,45 @@ public class PlayerController : MonoBehaviour
          * and that when we multiply it by speed it will always be 
          * the same result
          */
-        Vector3 moveDir = new Vector3(moveX, 0f, moveY).normalized;
+        Vector3 moveDir = new Vector3(moveX, 0f, moveY);
         /* transformDirections takes the local direction we want to go in 
          * and converts it to a world space equivalent
          */
-        moveDir = transform.TransformDirection(moveDir);
-        movePlayer(moveDir);
-
-
+        moveVec = transform.TransformDirection(moveDir).normalized;
+        
     }
 
-    private void movePlayer(Vector3 moveDir)
+    private void movePlayer()
     {
-        manageStamina();
-        playerCont.Move(moveDir * Time.deltaTime * currSpeed);
+        /*
+         * drag should only active if grounded
+         * if is active while falling, the fall will be super slow
+         */
+        if (isGrounded())
+        {
+            playerRB.drag = 5;
+        }
+        else
+        {
+            playerRB.drag = 0;
+        }
+
+        playerRB.AddForce(moveVec * currSpeed * 10, ForceMode.Force);
+
     }
 
+    private void SpeedControl()
+    {
+        Vector3 currMoveVec = new Vector3(playerRB.velocity.x, 0, playerRB.velocity.z);
+
+        if(currMoveVec.magnitude > currSpeed)
+        {
+            Vector3 controlledSpeedVec = currMoveVec.normalized * currSpeed;
+            playerRB.velocity = new Vector3(controlledSpeedVec.x, playerRB.velocity.y, controlledSpeedVec.z);
+        }
+    }
+
+    #region stamina code
     private void manageStamina()
     {
         if (currStamina <= 0)
@@ -162,12 +206,24 @@ public class PlayerController : MonoBehaviour
         }
         isStamRecharging = false;
     }
+    #endregion
 
-    private void playerGravity()
+    #region jump code
+    private void physicsJump()
     {
-
-        Vector3 gravVec = new Vector3(0, gravity, 0);
-
-        playerCont.Move(gravVec * Time.deltaTime);
+        if(isGrounded() && Input.GetKeyDown(KeyCode.Space))
+        {
+            //reset y velocity so you always jump same height
+            //playerRB.velocity = new Vector3(playerRB.velocity.x, 0f, playerRB.velocity.z);
+            playerRB.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        }
     }
+
+
+    private bool isGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 1.3f);
+    }
+
+    #endregion
 }
