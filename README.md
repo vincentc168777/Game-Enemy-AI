@@ -26,4 +26,6 @@ The AI uses A-star algorithm to determine its path
 <br>
 The AI uses a state machine with 3 states: Idle, Patrol, Attack
 
+![state machine](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/b36c6576-4673-4c24-8476-ad48f6db87ed)
+
 
