@@ -8,7 +8,7 @@ A game enemy AI that can patrol, chase, and attack player.
 Shoots balls at player if they get too close.
 
 ![attack](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/faeff65e-625d-4e92-b841-a0ff09dbc0f9)
-
+<pre>
 
 
 
@@ -27,4 +27,4 @@ The AI uses A-star algorithm to determine its path
 
 The AI uses a state machine with 3 states: Idle, Patrol, Attack
 
-<pre>
+
