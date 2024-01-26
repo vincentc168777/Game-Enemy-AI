@@ -19,18 +19,22 @@ The AI will alternate between Idle and patrol state, and if the player gets clos
 the AI will switch to attack and start shooting balls at the player.<br>
 
 To accomplish this, I decided to use a state machine. It allows me to add in behaviors and transitions between them for the AI<br>
-The picture below illustrates when the AI will chnage behavior
+The picture below illustrates when the AI will change behavior.
 
 ![state machine](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/02f68499-c854-451f-a19c-30c6c5efe4b7)
 
 <br>
-
+Attack state<br>
+The AI checks if player is within a certain range. It it is, it starts attacking.
 ![attack](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/faeff65e-625d-4e92-b841-a0ff09dbc0f9)
-
-
+<br>
+Idle<br>
+For idle, the enemy AI will just look around, when it stops looking around, it will choose between <br>
+going on patrol or continue staying idle.
 ![idle](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/2ace8440-5aff-472b-bd2e-78b580b05b52)
-
-For patroling, I used the A-star pathfinding algorithm
+<br>
+Patrol<br>
+For patrolling, I used the A-star pathfinding algorithm.
 It finds the best path to a random location or where the player is while making sure it does not hit obstacles.<br>
 
 ![image](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/ebfa15fb-eac1-416d-95e9-5f0d441f4a5b)
