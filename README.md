@@ -3,6 +3,10 @@ This is my Game Enemy AI Project
 
 I used the Unity Game Engine and C#
 
+Complete Script Files:
+https://github.com/vincentc168777/Game-Enemy-AI/tree/main/EnemyAIProj/Assets/Scripts
+
+
 ## Table of Contents 
 * [Motivation](#motivation)
 * [Approach](#My-Approach)
@@ -24,18 +28,18 @@ The picture below illustrates when the AI will change behavior.
 ![state machine](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/02f68499-c854-451f-a19c-30c6c5efe4b7)
 
 <br>
-Attack state<br>
+Attack State<br>
 The AI checks if player is within a certain range. It it is, it starts attacking.
 
 ![attack](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/faeff65e-625d-4e92-b841-a0ff09dbc0f9)
 <br>
-Idle<br>
+Idle State<br>
 For idle, the enemy AI will just look around, when it stops looking around, it will choose between <br>
 going on patrol or continue staying idle.
 
 ![idle](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/2ace8440-5aff-472b-bd2e-78b580b05b52)
 <br>
-Patrol<br>
+Patrol State<br>
 For patrolling, I used the A-star pathfinding algorithm.
 It finds the best path to a random location or where the player is while making sure it does not hit obstacles.<br>
 
@@ -57,8 +61,9 @@ the player is near, the enemy AI will start attacking by shooting balls at the p
 * Learning how to make an enemy AI attack the player and walk around like we see in games proved difficult. There is lots of code that
   goes into just pathfinding.
 * Learned a cool pathfinding algorithm
-* 
-* 
+* Learned how to use state machine
+* How to organize complex code to maintain abstraction
+  
   
 
 
