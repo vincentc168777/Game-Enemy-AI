@@ -7,7 +7,6 @@ I used the Unity Game Engine and C#
 * [Motivation](#motivation)
 * [Approach](#My-Approach)
 * [Results](#results)
-* [Insights](#insights)
 * [What Was learned](#what-was-learned)
 
 
@@ -26,7 +25,12 @@ The picture below illustrates when the AI will chnage behavior
 
 <br>
 
-For the pathfinding, I used the A-star algorithm
+![attack](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/faeff65e-625d-4e92-b841-a0ff09dbc0f9)
+
+
+![idle](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/2ace8440-5aff-472b-bd2e-78b580b05b52)
+
+For patroling, I used the A-star pathfinding algorithm
 It finds the best path to a random location or where the player is while making sure it does not hit obstacles.<br>
 
 ![image](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/ebfa15fb-eac1-416d-95e9-5f0d441f4a5b)
@@ -39,16 +43,14 @@ The algorithm in action
 
 ## Results
 Overall, the project was a success. The AI can patrol and idle while the player is not around, and if
-the player is near, the enemy AI will strt attacking by shooting balls at the player
+the player is near, the enemy AI will start attacking by shooting balls at the player
 
 ![demo](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/705ad39a-a7fa-44b6-944a-6ad2a31d0ea2)
 
-## Insights
-
-
 ## What was learned
-* 
-* 
+* Learning how to make an enemy AI attack the player and walk around like we see in games proved difficult. There is lots of code that
+  goes into just pathfinding.
+* Learned a cool pathfinding algorithm
 * 
 * 
   
@@ -64,10 +66,7 @@ the player is near, the enemy AI will strt attacking by shooting balls at the pl
 
 
 
-![attack](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/faeff65e-625d-4e92-b841-a0ff09dbc0f9)
 
-
-![idle](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/2ace8440-5aff-472b-bd2e-78b580b05b52)
 
 
 
