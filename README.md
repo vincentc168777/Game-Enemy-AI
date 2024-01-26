@@ -26,7 +26,7 @@ The picture below illustrates when the AI will chnage behavior
 
 <br>
 
-For the pathfinding, I used the Astar algorithm
+For the pathfinding, I used the A-star algorithm
 It finds the best path to a random location or where the player is while making sure it does not hit obstacles.<br>
 
 ![image](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/ebfa15fb-eac1-416d-95e9-5f0d441f4a5b)
@@ -38,7 +38,10 @@ The algorithm in action
 ![patrolling](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/9fc21a53-ccce-4913-a0a1-128db4f6f8a8)
 
 ## Results
+Overall, the project was a success. The AI can patrol and idle while the player is not around, and if
+the player is near, the enemy AI will strt attacking by shooting balls at the player
 
+![demo](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/705ad39a-a7fa-44b6-944a-6ad2a31d0ea2)
 
 ## Insights
 
@@ -56,7 +59,7 @@ The algorithm in action
 
 
 
-![demo](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/705ad39a-a7fa-44b6-944a-6ad2a31d0ea2)
+
 
 
 
