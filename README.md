@@ -13,7 +13,7 @@ Shoots balls at player if they get too close.
 
 
 
-
+<pre>
 The AI uses A-star algorithm to determine its path
 
 ![image](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/ebfa15fb-eac1-416d-95e9-5f0d441f4a5b)
@@ -26,3 +26,5 @@ The AI uses A-star algorithm to determine its path
 
 
 The AI uses a state machine with 3 states: Idle, Patrol, Attack
+
+<pre>
