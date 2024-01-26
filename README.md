@@ -13,7 +13,7 @@ the AI will switch to attack and start shooting balls at the player
 
 
 The AI uses a state machine with 3 states: Idle, Patrol, Attack
-The picture below illustrate how the state transition to one another
+The picture below illustrates how the state transition to one another
 <br>
 <br>
 
