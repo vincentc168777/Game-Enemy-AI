@@ -26,18 +26,21 @@ To accomplish this, I decided to use a state machine. It allows me to add in beh
 The picture below illustrates when the AI will change behavior.
 
 ![state machine](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/02f68499-c854-451f-a19c-30c6c5efe4b7)
-
+<br>
 <br>
 Attack State<br>
 The AI checks if player is within a certain range. It it is, it starts attacking.
 
 ![attack](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/faeff65e-625d-4e92-b841-a0ff09dbc0f9)
 <br>
+<br>
 Idle State<br>
 For idle, the enemy AI will just look around, when it stops looking around, it will choose between <br>
 going on patrol or continue staying idle.
 <br>
+<br>
 ![idle](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/2ace8440-5aff-472b-bd2e-78b580b05b52)
+<br>
 <br>
 Patrol State<br>
 For patrolling, I used the A-star pathfinding algorithm.
