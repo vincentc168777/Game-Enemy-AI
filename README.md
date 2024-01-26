@@ -1,7 +1,7 @@
 # Game Enemy AI
-A game enemy AI that can patrol, chase, and attack player.
-The AI will alternate between Idle and patrol state, and if the player gets close,
-the AI will switch to attack and start shooting balls at the player
+A game enemy AI that can patrol, chase, and attack player.<br>
+The AI will alternate between Idle and patrol state, and if the player gets close,<br>
+the AI will switch to attack and start shooting balls at the player.<br>
 
 
 ![demo](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/705ad39a-a7fa-44b6-944a-6ad2a31d0ea2)
@@ -12,8 +12,8 @@ the AI will switch to attack and start shooting balls at the player
 <br>
 
 
-The AI uses a state machine with 3 states: Idle, Patrol, Attack
-The picture below illustrates how the state transition to one another
+The AI uses a state machine with 3 states: Idle, Patrol, Attack.<br>
+The picture below illustrates how the state transition to one another.
 <br>
 <br>
 
@@ -36,8 +36,8 @@ Idle
 <br>
 <br>
 
-The AI uses A-star algorithm for pathfinding
-It finds the best path to a random location or where the player is while making sure it takes obstacles into account
+The AI uses A-star algorithm for pathfinding.<br>
+It finds the best path to a random location or where the player is while making sure it takes obstacles into account.<br>
 
 ![image](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/ebfa15fb-eac1-416d-95e9-5f0d441f4a5b)
 
