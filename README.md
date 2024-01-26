@@ -5,7 +5,7 @@ I used the Unity Game Engine and C#
 
 ## Table of Contents 
 * [Motivation](#motivation)
-* [Aapproach](#My-Approach)
+* [Approach](#My-Approach)
 * [Results](#results)
 * [Insights](#insights)
 * [What Was learned](#what-was-learned)
