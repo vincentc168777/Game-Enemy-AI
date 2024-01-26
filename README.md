@@ -9,8 +9,6 @@ Shoots balls at player if they get too close.
 <br>
 <br>
 <br>
-<br>
-<br>
 
 
 The AI uses a state machine with 3 states: Idle, Patrol, Attack
