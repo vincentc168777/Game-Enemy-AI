@@ -1,7 +1,44 @@
 # Game Enemy AI
-A game enemy AI that can patrol, chase, and attack player.<br>
+This is my Game Enemy AI Project
+
+I used the Unity Game Engine and C#
+
+## Table of Contents 
+* [Motivation](#motivation)
+* [Aapproach](#My-Approach)
+* [Results](#results)
+* [Insights](#insights)
+* [What Was learned](#what-was-learned)
+
+
+## Motivation
+I wanted to create a game enemy AI that can patrol, chase, and attack player.<br>
+
+
+## My Approach
 The AI will alternate between Idle and patrol state, and if the player gets close,<br>
 the AI will switch to attack and start shooting balls at the player.<br>
+
+To accomplish this, I decided to use a state machine. 
+
+
+## Results
+
+
+## Insights
+
+
+## What was learned
+* 
+* 
+* 
+* 
+  
+
+
+
+
+
 
 
 ![demo](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/705ad39a-a7fa-44b6-944a-6ad2a31d0ea2)
