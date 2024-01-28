@@ -46,6 +46,9 @@ Patrol State<br>
 For patrolling, I used the A-star pathfinding algorithm.
 It finds the best path to a random location or where the player is while making sure it does not hit obstacles.<br>
 
+Website talking about the algorithm can be found here: https://www.redblobgames.com/pathfinding/a-star/introduction.html
+<br>
+
 ![image](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/ebfa15fb-eac1-416d-95e9-5f0d441f4a5b)
 
 ![image](https://github.com/vincentc168777/Game-Enemy-AI/assets/93815609/4143a6fb-5392-4d66-b16b-88180867a556)
